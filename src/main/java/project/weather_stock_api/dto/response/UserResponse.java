@@ -1,14 +1,14 @@
 package project.weather_stock_api.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.stereotype.Component;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Component
+@Getter
 public class UserResponse {
-    String token;
+    private String token;
 }

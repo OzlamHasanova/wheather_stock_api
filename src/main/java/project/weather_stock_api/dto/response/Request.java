@@ -6,7 +6,6 @@ import lombok.Getter;
 
 
 @Data
-@Getter
 public class Request{
        private String type;
        private String query;

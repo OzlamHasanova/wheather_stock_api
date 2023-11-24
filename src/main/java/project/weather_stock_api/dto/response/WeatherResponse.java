@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 @Builder
 @Data
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class WeatherResponse{

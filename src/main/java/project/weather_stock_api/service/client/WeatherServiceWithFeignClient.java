@@ -7,7 +7,6 @@ import project.weather_stock_api.dto.response.WeatherResponse;
 
 @FeignClient(name = "weatherStack",url = "http://api.weatherstack.com")
 public interface WeatherServiceWithFeignClient {
-
     @GetMapping("/current")
     WeatherResponse getWeatherResponseWithFeignClient(@RequestParam("access_key")String  API_ACCESS_KEY,@RequestParam("query")String query);
 }

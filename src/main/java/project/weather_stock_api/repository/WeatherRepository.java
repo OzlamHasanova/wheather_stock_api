@@ -10,6 +10,5 @@ import java.util.UUID;
 @Repository
 public interface WeatherRepository extends JpaRepository<Weather,String> {
 Optional<Weather> findFirstByRequestedCityNameOrderByUpdateTimeDesc(String city);
-List<Weather> findAllByRequestedCityNameOrderByUpdateTimeDesc(String city);
 
 }

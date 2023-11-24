@@ -7,13 +7,10 @@ import lombok.Getter;
 
 
 @Data
-@Getter
 public class Current{
        private String observation_time;
        private Integer temperature;
        private Integer weather_code;
-       //private String weather_icons;
-//       private String weather_descriptions;
        private Integer wind_speed;
        private Integer wind_degree;
        private String wind_dir;

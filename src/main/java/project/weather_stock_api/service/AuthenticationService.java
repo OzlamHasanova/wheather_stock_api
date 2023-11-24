@@ -4,8 +4,10 @@ import project.weather_stock_api.dto.request.UserRegisterRequest;
 import project.weather_stock_api.dto.request.UserRequest;
 import project.weather_stock_api.dto.response.UserResponse;
 
-public interface AuthenticationService {
-    UserResponse register(UserRegisterRequest userRegisterRequest);
+import java.io.IOException;
 
-    UserResponse login(UserRequest userRequest);
+public interface AuthenticationService {
+    UserResponse save(UserRegisterRequest userRegisterRequest) throws IOException;
+
+    UserResponse auth(UserRequest userRequest);
 }

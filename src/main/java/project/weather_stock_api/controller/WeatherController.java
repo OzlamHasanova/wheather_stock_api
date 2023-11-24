@@ -1,5 +1,6 @@
 package project.weather_stock_api.controller;
 
+import jakarta.mail.internet.AddressException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,7 @@ import project.weather_stock_api.service.WeatherService;
 public class WeatherController {
     private final WeatherService weatherService;
     @GetMapping("/{city}")
-    public WeatherDto getWeatherByCityName(@PathVariable("city") String city){
+    public WeatherDto getWeatherByCityName(@PathVariable("city") String city) throws AddressException {
         return weatherService.getWeatherByCityName(city);
     }
 
