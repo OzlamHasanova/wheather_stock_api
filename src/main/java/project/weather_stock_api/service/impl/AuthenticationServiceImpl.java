@@ -1,6 +1,7 @@
 package project.weather_stock_api.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,7 +11,10 @@ import project.weather_stock_api.dto.request.UserRegisterRequest;
 import project.weather_stock_api.dto.request.UserRequest;
 import project.weather_stock_api.dto.response.UserResponse;
 import project.weather_stock_api.entity.User;
+import project.weather_stock_api.entity.Weather;
 import project.weather_stock_api.enums.UserRole;
+import project.weather_stock_api.exception.ExceptionConstants;
+import project.weather_stock_api.exception.WeatherProjectException;
 import project.weather_stock_api.repository.UserRepository;
 import project.weather_stock_api.service.AuthenticationService;
 import project.weather_stock_api.service.security.JwtService;
@@ -19,6 +23,7 @@ import java.io.File;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
 
 
@@ -29,33 +34,42 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         private final AuthenticationManager authenticationManager;
 
         private final PasswordEncoder passwordEncoder;
-        private String path="C:\\Users\\User\\OneDrive\\Pictures\\Screenshots";
+        private String PATH_IMAGE="C:\\Users\\User\\OneDrive\\Pictures\\Screenshots";
 
         public UserResponse save(UserRegisterRequest userRegisterRequest){
-            MultipartFile file = userRegisterRequest.getUserImg();
-            String name = file.getOriginalFilename();
-            String filePath = path + File.separator + name;
+           try{
+               MultipartFile file = userRegisterRequest.getUserImg();
+               String name = file.getOriginalFilename();
+               String filePath = PATH_IMAGE + File.separator + name;
 
-            System.out.println(name);
-
-            User user = User.builder()
-                    .username(userRegisterRequest.getUsername())
-                    .password(passwordEncoder.encode(userRegisterRequest.getPassword()))
-                    .email(userRegisterRequest.getEmail())
-                    .userImg(filePath)
-                    .role(UserRole.USER).build();
-            userRepository.save(user);
-            String token = jwtService.generateToken(user);
-            return UserResponse.builder().token(token).build();
+               User user = User.builder()
+                       .username(userRegisterRequest.getUserName())
+                       .password(passwordEncoder.encode(userRegisterRequest.getPassword()))
+                       .email(userRegisterRequest.getEmail())
+                       .userImg(filePath)
+                       .role(UserRole.USER).build();
+               userRepository.save(user);
+               String token = jwtService.generateToken(user);
+               return UserResponse.builder().token(token).build();
+           }catch (WeatherProjectException ex){
+               log.error("An error occurred during user registration", ex);
+               throw new WeatherProjectException(ExceptionConstants.INVALID_REQUEST_DATA,"Invalid request data");
+           }
         }
 
         public UserResponse auth(UserRequest userRequest) {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    userRequest.getUsername(),
-                    userRequest.getPassword()));
-            User user=userRepository.findByEmail(userRequest.getUsername()).orElseThrow();
-            String token=jwtService.generateToken(user);
-            return UserResponse.builder().token(token).build();
+            try{
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                        userRequest.getUsername(),
+                        userRequest.getPassword()));
+                User user=userRepository.findByEmail(userRequest.getUsername()).orElseThrow();
+                String token=jwtService.generateToken(user);
+                return UserResponse.builder().token(token).build();
+
+            }catch (WeatherProjectException ex){
+                log.error("An error occurred during user login", ex);
+                throw new WeatherProjectException(ExceptionConstants.INVALID_REQUEST_DATA,"Invalid request data");
+            }
 
         }
 

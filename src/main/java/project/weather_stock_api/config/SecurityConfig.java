@@ -38,7 +38,6 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
-
     public static String[] permitSwagger = {
             "/v2/api-docs",
             "/v3/api-docs",

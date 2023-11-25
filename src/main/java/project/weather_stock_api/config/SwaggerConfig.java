@@ -12,7 +12,6 @@ import static io.swagger.v3.oas.models.security.SecurityScheme.Type.HTTP;
 
 @Configuration
 public class SwaggerConfig {
-
     @Bean
     public OpenAPI myOpenAPI() {
 
@@ -26,7 +25,6 @@ public class SwaggerConfig {
         openAPI.setInfo(apiInformation);
         openAPI.setComponents(components);
         openAPI.addSecurityItem(new SecurityRequirement().addList(schemeName));
-
         return openAPI;
     }
     private Info getApiInformation() {

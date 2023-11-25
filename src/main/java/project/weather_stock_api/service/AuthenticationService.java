@@ -7,7 +7,7 @@ import project.weather_stock_api.dto.response.UserResponse;
 import java.io.IOException;
 
 public interface AuthenticationService {
-    UserResponse save(UserRegisterRequest userRegisterRequest) throws IOException;
+    UserResponse save(UserRegisterRequest userRegisterRequest);
 
     UserResponse auth(UserRequest userRequest);
 }
