@@ -2,6 +2,8 @@ package project.weather_stock_api.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +26,7 @@ import java.io.File;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@PropertySource("classpath:config.properties")
 public class AuthenticationServiceImpl implements AuthenticationService {
 
 
@@ -34,7 +37,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         private final AuthenticationManager authenticationManager;
 
         private final PasswordEncoder passwordEncoder;
-        private String PATH_IMAGE="C:\\Users\\User\\OneDrive\\Pictures\\Screenshots";
+
+          @Value("${image.path}")
+         private String PATH_IMAGE;
 
         public UserResponse save(UserRegisterRequest userRegisterRequest){
            try{

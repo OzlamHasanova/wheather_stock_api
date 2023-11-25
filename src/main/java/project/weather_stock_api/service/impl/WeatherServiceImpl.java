@@ -3,6 +3,8 @@ package project.weather_stock_api.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -25,6 +27,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@PropertySource("classpath:config.properties")
 public class WeatherServiceImpl implements WeatherService {
 
     private final WeatherRepository weatherRepository;
@@ -33,6 +36,8 @@ public class WeatherServiceImpl implements WeatherService {
     @Autowired
     private JavaMailSender javaMailSender;
 
+    @Value("${access_key}")
+    private String API_ACCESS_KEY;
 
     @Override
     public WeatherDto getWeatherByCityName(String cityName) {
@@ -62,7 +67,6 @@ public class WeatherServiceImpl implements WeatherService {
         }
     }
     private Weather getWeatherFromWeatherStack(String city) {
-        String API_ACCESS_KEY = "2ef576001bc87b5ac662544d44a9343b";
         WeatherResponse weatherResponse = weatherServiceWithFeignClient.getWeatherResponseWithFeignClient(API_ACCESS_KEY, city);
         Weather weather = mapping(city,weatherResponse);
         log.info("Information about the weather is obtained from the given api");
