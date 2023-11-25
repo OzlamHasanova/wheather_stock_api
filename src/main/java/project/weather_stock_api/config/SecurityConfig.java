@@ -24,8 +24,11 @@ public class SecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login/**")
-                .permitAll()
+                        .requestMatchers("/login/**")
+                        .permitAll()
+                        .requestMatchers(permitSwagger).permitAll()
+//                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**","/configuration/ui",
+//                                "configuration/security","/v1/api/weather","/v1/api/weather/**").permitAll()
                 .anyRequest()
                 .authenticated())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -34,4 +37,21 @@ public class SecurityConfig {
 
         return httpSecurity.build();
     }
+
+
+    public static String[] permitSwagger = {
+            "/v2/api-docs",
+            "/v3/api-docs",
+            "/v3/api-docs/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui/**",
+            "/webjars/**",
+            "/swagger-ui.html"
+    };
+
+
+
 }

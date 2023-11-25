@@ -14,9 +14,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import project.weather_stock_api.repository.UserRepository;
 
+
 @Configuration
 @RequiredArgsConstructor
-public class ApplicationConfig {
+public class ApplicationConfig{
 
     private final UserRepository userRepository;
     @Bean

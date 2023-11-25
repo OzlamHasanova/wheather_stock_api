@@ -1,5 +1,7 @@
 package project.weather_stock_api.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,15 +14,18 @@ import project.weather_stock_api.service.AuthenticationService;
 
 import java.io.IOException;
 
-@RestController
+@RestController(value = "/users")
+@Tag(name = "Clients")
 @RequestMapping("/login")
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
+    @Operation(summary = "This method is used to get the clients.")
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(UserRegisterRequest userRegisterRequest) throws IOException {
         return ResponseEntity.ok(authenticationService.save(userRegisterRequest));
     }
+    @Operation(summary = "This method is used to get the clients.")
     @PostMapping("/login")
     public ResponseEntity<UserResponse> login(@RequestBody UserRequest userRequest){
         return ResponseEntity.ok(authenticationService.auth(userRequest));

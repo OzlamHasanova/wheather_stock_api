@@ -1,5 +1,6 @@
 package project.weather_stock_api.config;
 
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
