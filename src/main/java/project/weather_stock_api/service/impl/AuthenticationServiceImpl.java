@@ -48,7 +48,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                String filePath = PATH_IMAGE + File.separator + name;
 
                User user = User.builder()
-                       .username(userRegisterRequest.getUserName())
+                       .username(userRegisterRequest.getUsername())
                        .password(passwordEncoder.encode(userRegisterRequest.getPassword()))
                        .email(userRegisterRequest.getEmail())
                        .userImg(filePath)

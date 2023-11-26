@@ -1,5 +1,6 @@
 package project.weather_stock_api.service.impl;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class WeatherServiceImpl implements WeatherService {
     private String API_ACCESS_KEY;
 
     @Override
-    public WeatherDto getWeatherByCityName(String cityName) {
+    public WeatherDto getWeatherByCityName(@NotBlank String cityName) {
 
         try {
             Optional<Weather> weatherOptional = weatherRepository.findFirstByRequestedCityNameOrderByUpdateTimeDesc(cityName);

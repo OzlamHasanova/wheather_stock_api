@@ -18,14 +18,14 @@ public class UserRegisterRequest {
     @NotNull
     @Pattern(regexp = "^[a-zA-Z0-9_]{3,20}$",
             message = "Username must be alphanumeric and between 3 to 20 characters")
-    private String userName;
+    private String username;
     @NotNull
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
             message = "Invalid email format")
     private String email;
     @NotNull
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$",
-            message = "Invalid password format")
+//    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$",
+//            message = "Invalid password format")
     private String password;
     @NotNull
     private MultipartFile userImg;
