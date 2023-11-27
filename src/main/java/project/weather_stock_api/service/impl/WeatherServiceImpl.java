@@ -1,6 +1,7 @@
 package project.weather_stock_api.service.impl;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,23 +42,21 @@ public class WeatherServiceImpl implements WeatherService {
     private String API_ACCESS_KEY;
 
     @Override
-    public WeatherDto getWeatherByCityName(@NotBlank String cityName) {
+    public WeatherDto getWeatherByCityName(@NotNull String cityName) {
 
         try {
             Optional<Weather> weatherOptional = weatherRepository.findFirstByRequestedCityNameOrderByUpdateTimeDesc(cityName);
             if (weatherOptional.isEmpty()) {
+                emailSending(cityName);
                 return WeatherDto.convert(getWeatherFromWeatherStack(cityName));
             }
             if(weatherOptional.get().getUpdateTime().isBefore(LocalDateTime.now().minusMinutes(40))){
+                emailSending(cityName);
                 return WeatherDto.convert(getWeatherFromWeatherStack(cityName));
+
             }
             WeatherDto weatherDto=WeatherDto.convert(weatherOptional.get());
-            SimpleMailMessage mailMessage=new SimpleMailMessage();
-            mailMessage.setFrom("7qk9bme@code.edu.az");
-            mailMessage.setTo(getEmail());
-            mailMessage.setText("Today in city "+cityName+" weather temperature is "+weatherDto.getTemperature());;
-            mailMessage.setSubject("weather");
-            javaMailSender.send(mailMessage);
+            emailSending(cityName);
 
             log.info("Email was sent to this email: "+getEmail());
 
@@ -85,10 +84,20 @@ public class WeatherServiceImpl implements WeatherService {
         weatherRepository.save(weather);
         return weather;
     }
+    public void emailSending(String cityName){
+        Optional<Weather> weatherOptional = weatherRepository.findFirstByRequestedCityNameOrderByUpdateTimeDesc(cityName);
+        WeatherDto weatherDto=WeatherDto.convert(weatherOptional.get());
+        SimpleMailMessage mailMessage=new SimpleMailMessage();
+        mailMessage.setFrom("7qk9bme@code.edu.az");
+        mailMessage.setTo(getEmail());
+        mailMessage.setText("Today in city "+cityName+" weather temperature is "+weatherDto.getTemperature());;
+        mailMessage.setSubject("weather");
+        javaMailSender.send(mailMessage);
+    }
     public String getEmail(){
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                String currentUserName = authentication.getName();
-                return currentUserName;
+                String email = authentication.getName();
+                return email;
 
     }
 }

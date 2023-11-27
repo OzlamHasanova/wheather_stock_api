@@ -21,7 +21,6 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtService {
-    private UserResponse userResponse;
 
     @Value("${security.jwt.secret}")
     private String SECRET_KEY;
@@ -59,7 +58,7 @@ public class JwtService {
         .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 120))
         .signWith(getKey(), SignatureAlgorithm.HS256)
         .compact();
-         log.info("Generated token"+token);
+         log.info("Generated token  "+token);
         return token;
     }
 }
