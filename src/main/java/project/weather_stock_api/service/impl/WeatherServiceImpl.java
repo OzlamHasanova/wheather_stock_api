@@ -1,15 +1,14 @@
 package project.weather_stock_api.service.impl;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -24,6 +23,7 @@ import project.weather_stock_api.service.client.WeatherServiceWithFeignClient;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -35,6 +35,8 @@ public class WeatherServiceImpl implements WeatherService {
     private final WeatherRepository weatherRepository;
     private final WeatherServiceWithFeignClient weatherServiceWithFeignClient;
 
+    private final MessageSource messageSource;
+
     @Autowired
     private JavaMailSender javaMailSender;
 
@@ -42,7 +44,7 @@ public class WeatherServiceImpl implements WeatherService {
     private String API_ACCESS_KEY;
 
     @Override
-    public WeatherDto getWeatherByCityName(@NotNull String cityName) {
+    public WeatherDto getWeatherByCityName(String cityName,String lang) {
 
         try {
             Optional<Weather> weatherOptional = weatherRepository.findFirstByRequestedCityNameOrderByUpdateTimeDesc(cityName);
@@ -58,12 +60,14 @@ public class WeatherServiceImpl implements WeatherService {
             WeatherDto weatherDto=WeatherDto.convert(weatherOptional.get());
             emailSending(cityName);
 
-            log.info("Email was sent to this email: "+getEmail());
+            log.info(messageSource.getMessage("email.send.log", null,
+                    new Locale(lang))+getEmail());
 
             return weatherDto;
         }catch (WeatherProjectException ex){
             ex.printStackTrace();
-            throw new WeatherProjectException(ExceptionConstants.WEATHER_INFORMATION_NOTE_FOUND,"Weather information note found");
+            throw new WeatherProjectException(ExceptionConstants.WEATHER_INFORMATION_NOTE_FOUND,messageSource.getMessage("WEATHER_INFORMATION_NOTE_FOUND", null,
+                    new Locale(lang)));
         }
     }
     private Weather getWeatherFromWeatherStack(String city) {

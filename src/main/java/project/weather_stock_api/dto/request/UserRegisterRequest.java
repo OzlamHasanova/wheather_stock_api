@@ -1,5 +1,7 @@
 package project.weather_stock_api.dto.request;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -13,15 +15,16 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Component
 public class UserRegisterRequest {
-    @NotNull
-    @Pattern(regexp = "^[a-zA-Z0-9_]{3,20}$",
-            message = "Username must be alphanumeric and between 3 to 20 characters")
+
+//    @Pattern(regexp = "^[a-zA-Z0-9_]{3,20}$",
+//            message = "error.emptyName")
+    @NotBlank(message = "ad bosh ola bilmez")
     private String username;
     @NotNull
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
             message = "Invalid email format")
+
     private String email;
     @NotNull
 //    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$",

@@ -8,14 +8,14 @@ import project.weather_stock_api.entity.User;
 import project.weather_stock_api.repository.UserRepository;
 
 
+// TODO i18 exception , Accept-Language
+
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final UserDetails userDetails;
-    public CustomUserDetailsService(UserRepository userRepository, UserDetails userDetails) {
+    public CustomUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.userDetails = userDetails;
     }
 
     @Override
