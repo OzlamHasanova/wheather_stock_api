@@ -49,14 +49,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private String PATH_IMAGE;
 
     public UserResponse save(UserRegisterRequest userRegisterRequest,String lang) {
-        try {
-            System.out.println(lang);
+        try{
             MultipartFile file = userRegisterRequest.getUserImg();
             String name = file.getOriginalFilename();
-//            if (!(name==null)){
-//                throw new Exception( messageSource.getMessage("product.success", null,
-//                        new Locale(lang)));
-//            }
             String filePath = PATH_IMAGE + File.separator + name;
 
             User user = User.builder()
@@ -68,12 +63,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             userRepository.save(user);
             String token = jwtService.generateToken(user);
             return UserResponse.builder().token(token).build();
-        } catch (WeatherProjectException ex) {
-            log.error("An error occurred during user registration", ex);
+        }catch (WeatherProjectException ex){
+            log.error(messageSource.getMessage("user.register.error", null,
+                    LocaleContextHolder.getLocale()), ex);
             throw new WeatherProjectException(ExceptionConstants.INVALID_REQUEST_DATA,messageSource.getMessage("INVALID_REQUEST_DATA", null,
-                       new Locale(lang)));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+                    LocaleContextHolder.getLocale()));
         }
 
     }
@@ -89,12 +83,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return UserResponse.builder().token(token).build();
 
         }catch (WeatherProjectException ex){
-            log.error("An error occurred during user login", ex);
+            log.error(messageSource.getMessage("user.login.error", null,
+                    LocaleContextHolder.getLocale()), ex);
             throw new WeatherProjectException(ExceptionConstants.INVALID_REQUEST_DATA,messageSource.getMessage("INVALID_REQUEST_DATA", null,
-                    new Locale(lang)));
-
-
-    }
+                    LocaleContextHolder.getLocale()));
+        }
 
 }
 }
